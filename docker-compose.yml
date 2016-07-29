@@ -1,0 +1,37 @@
+version: "2"
+
+services:
+  aaa:
+    build: ./AAA
+    hostname: aaa
+    container_name: aaa
+    volumes:
+      - "./app:/src/app"
+    ports:
+      - "8181:8181"
+    networks:
+      - bb-net
+    links:
+      - rabbit-mq
+  bbb:
+    build: ./BBB
+    hostname: bbb
+    container_name: bbb
+    networks:
+      - bb-net
+    volumes:
+      - "./app:/src/app"
+    links:
+      - rabbit-mq
+  rabbit-mq:
+    image: rabbitmq
+    hostname: rabbitMQ
+    container_name: rabbitmq
+    networks:
+      - bb-net
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+networks:
+  bb-net:
+    driver: bridge
